@@ -27,8 +27,6 @@ struct LoginPageView: View {
                 //form field
                 VStack(spacing: 20.0){
                     FieldsView(text: $email, title: "Email Address", content: "name@example.com")
-//                        .textCase(.lowercase)
-////                        .textInputAutocapitalization(.never)
                     
                     FieldsView(text: $password, title: "Password", content: "Enter your password", isSecureField: true)
                 }

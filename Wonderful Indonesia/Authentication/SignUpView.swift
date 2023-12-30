@@ -13,7 +13,6 @@ struct SignUpView: View {
     @State private var username = ""
     @State private var password = ""
     @State private var confirmationPassword = ""
-//    @EnvironmentObject var userOperation: UserOperation
     @Environment(UserOperation.self) private var userOperation
     
     var body: some View {

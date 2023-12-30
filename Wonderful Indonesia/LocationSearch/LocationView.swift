@@ -20,18 +20,6 @@ struct LocationView: View {
         Map(){
             Marker("HERE", systemImage: "figure.wave", coordinate: locationCoordinate(lat: item.lat, lng: item.lng))
                 .tag(1)
-            
-//            Annotation( //custom
-//                "Keelung", coordinate: .location,anchor:.bottom){
-//                    Image(systemName: "figure.wave")
-//                        .padding(4)
-//                        .foregroundStyle(.white)
-//                        .background(Color.indigo)
-//                        .cornerRadius(4)
-//            }
-//                .tag(2)
-//                .annotationTitles(.hidden)
-           
         }
         .navigationBarTitleDisplayMode(.inline)
         .mapStyle(.imagery)
