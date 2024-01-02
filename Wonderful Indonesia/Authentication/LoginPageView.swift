@@ -10,7 +10,6 @@ import SwiftUI
 struct LoginPageView: View {
     @State private var email = ""
     @State private var password = ""
-//    @EnvironmentObject var userOperation: UserOperation
     @Environment(UserOperation.self) private var userOperation
     
     

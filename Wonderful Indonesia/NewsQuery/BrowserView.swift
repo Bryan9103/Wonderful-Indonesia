@@ -15,7 +15,6 @@ struct BrowserView: View {
         VStack{
             ShareLink(item: urlString)
                 .frame(width:350, height: 10, alignment: .trailing)
-                
             
             webView(url: URL(string: urlString)!)
             

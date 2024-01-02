@@ -27,6 +27,7 @@ struct Wonderful_IndonesiaApp: App {
         WindowGroup{
             MainView()
                 .environment(networkMonitor)
+//                .environment(userOperation)
         }
     }
 }

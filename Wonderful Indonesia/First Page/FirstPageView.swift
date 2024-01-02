@@ -61,7 +61,7 @@ struct FirstPageView: View {
                             Spacer()
                             ProgressView()
                         })
-                        .background(.background)
+                        .background()
                         
                     }
                 }

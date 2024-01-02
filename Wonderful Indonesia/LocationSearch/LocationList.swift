@@ -43,7 +43,11 @@ struct LocationList: View {
                     )
                 }
                 else if(notFound){
-                    Text("No Data Found")
+                    ContentUnavailableView(label: {
+                        Text ("No Data Found")
+                            .font(.custom("Hand TypeWriter", fixedSize: 20))
+                    }, actions: {
+                    })
                 }
                 else if(fetcher.location.isEmpty && search != ""){
                     ContentUnavailableView(label: {
@@ -93,12 +97,7 @@ struct LocationList: View {
                         self.error = error
                         showError = true
                         print(error.localizedDescription)
-                        if(error.localizedDescription.contains("connect")){
-                            noConnection = true
-                        }
-                        else{
-                            noConnection = false
-                        }
+                        noConnection = error.localizedDescription.contains("connect") ? true : false;
                     }
                 }
             }

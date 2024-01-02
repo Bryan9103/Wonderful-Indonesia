@@ -30,84 +30,76 @@ struct NewsList: View {
     
     var body: some View {
         NavigationStack{
-                VStack{
-                    TipView(tip, arrowEdge: .bottom)
-                    Button {
-                        // Invalidate the tip when someone uses the feature.
-                        tip.invalidate(reason: .actionPerformed)
-                    } label: {
-                        Label("Tips", systemImage: "star")
-                    }
-                    if(noConnection){
-                        ContentUnavailableView(
-                            "No Internet Connection",
-                            systemImage: "wifi.exclamationmark",
-                            description: Text("Please check your connection and try again.")
-                        )
-                    }
-                    else if(notFound){
-                        Text("No Data Found")
-                    }
-                    else if(newsQuery.news.isEmpty){
-                        ContentUnavailableView(label: {
-                            Text ("Fetching Data...")
-                                .font(.custom("Hand TypeWriter", fixedSize: 20))
-                        }, actions: {
-                            Spacer()
-                            ProgressView()
-                        })
-                    }
-                    else{
-                        List{
-                            ForEach(newsQuery.news){ news in
-                                NewsView(news: news)
-                            }
-                        }
-                    }
-                }
-                .task{
-                    if newsQuery.news.isEmpty{
-                        do{
-                            try await newsQuery.queryData()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10), execute: {
-                                if(newsQuery.news.isEmpty){
-                                    notFound = true
-                                }
-                            })
-                        } catch{
-                            self.error = error
-                            showError = true
-                            if(error.localizedDescription.contains("connect")){
-                                noConnection = true
-                            }
-                            else{
-                                noConnection = false
-                            }
-                        }
-                    }
-                }
-                .refreshable {
-                    do{
-                        try await newsQuery.queryData()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: {
-                            if(newsQuery.news.isEmpty){
-                                notFound = true
-                            }
-                        })
-                    } catch{
-                        self.error = error
-                        showError = true
-                        if(error.localizedDescription.contains("connect")){
-                            noConnection = true
-                        }
-                        else{
-                            noConnection = false
-                        }
-                    }
-                }
-                .alert(error?.localizedDescription ?? "",isPresented:$showError, actions:{})
-
+            TipView(tip, arrowEdge: .bottom)
+            Button {
+                // Invalidate the tip when someone uses the feature.
+                tip.invalidate(reason: .actionPerformed)
+            } label: {
+                Label("Tips", systemImage: "star")
             }
+            if(noConnection){
+                ContentUnavailableView(
+                    "No Internet Connection",
+                    systemImage: "wifi.exclamationmark",
+                    description: Text("Please check your connection and try again.")
+                )
+            }
+            else if(notFound){
+                ContentUnavailableView(label: {
+                    Text ("No Data Found")
+                        .font(.custom("Hand TypeWriter", fixedSize: 20))
+                }, actions: {
+                })
+            }
+            else if(newsQuery.news.isEmpty){
+                ContentUnavailableView(label: {
+                    Text ("Fetching Data...")
+                        .font(.custom("Hand TypeWriter", fixedSize: 20))
+                }, actions: {
+                    Spacer()
+                    ProgressView()
+                })
+            }
+            else{
+                List{
+                    ForEach(newsQuery.news){ news in
+                        NewsView(news: news)
+                    }
+                }
+            }
+        }
+        .task{
+            if newsQuery.news.isEmpty{
+                do{
+                    try await newsQuery.queryData()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10), execute: {
+                        if(newsQuery.news.isEmpty){
+                            notFound = true
+                        }
+                    })
+                } catch{
+                    self.error = error
+                    showError = true
+                    noConnection = error.localizedDescription.contains("connect") ? true : false;
+                }
+            }
+        }
+        .refreshable {
+            do{
+                try await newsQuery.queryData()
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: {
+                    if(newsQuery.news.isEmpty){
+                        notFound = true
+                    }
+                })
+            } catch{
+                self.error = error
+                showError = true
+                noConnection = error.localizedDescription.contains("connect") ? true : false;
+            }
+        }
+        .alert(error?.localizedDescription ?? "",isPresented:$showError, actions:{})
+        
     }
 }
 
